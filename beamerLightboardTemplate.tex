@@ -1,0 +1,489 @@
+%%% This is beamerLightboardTemplate.tex (c) 2016 by Tom Roby
+%%% Initially created for use with lightboards in Fall 2015. 
+%%% Very hacky version; someone who knows what they are doing could likely significantly
+%%% improve useability. 
+%%% REQUIRES beamerBlockStyle.sty file to fix problem with colored backgrounds in blocks; 
+%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%				   %%% LICENSE BELOW %%%                                % 
+% activityLTapplet.tex is licensed under 						% 
+% Creative Commons Attribution-ShareAlike 4.0 International License and also a		% 
+% Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.	% 
+%											% 
+% You should have received a copy of a license along with this				% 
+% work.  If not, see <http://creativecommons.org/licenses/by-sa/4.0/>			% 
+% and also <http://creativecommons.org/licenses/by-nc-sa/4.0/>				% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+\documentclass[aspectratio=169,xcolor={table,dvipsnames}]{beamer}
+
+%%% DOCUMENT DATA Fill in your own below
+\def\crseNo{MATH 9753}
+\def\crseTi{Probabilist Categorification}
+\def\crseTiSht{ProbCat}
+\def\crseSe{}  %% Leave this off so lectures can be resued.  
+\author{Tom Roby}
+
+%%% Number things however you like (or not at all), but best to maintain some flexibility
+%%% to add or replace lectures late, and to use with a variety of timelines (MWF vs. TuTh
+%%% vs. summer).  Best to tie them to topics or collections of related outcomes, rather than
+%%% any particular calendar or even textbook for best reuseability.
+\title[VL\#1a: Intro to ProbCat]{Video Lecture \#1a: Introduction to Probabilistic
+Categorification (Beamer template for lightboard use)}
+\date{}  %% Leave this off so lectures can be resued.  
+\setlength{\parskip}{\medskipamount}
+
+%%% DOCUMENT PARAMETERS, e.g., margins, date format note used here
+%%% Beamer has its own commands for resetting margins: see that chunk of preamble
+% \setlength{\oddsidemargin}{0in}
+% \setlength{\evensidemargin}{0in}
+% \setlength{\textwidth}{4.5in}
+% \setlength{\topmargin}{0in}
+% \setlength{\textheight}{9in}
+
+%%% VARIOUS PACKAGES I NEED:
+
+%% Various AMS packages for math
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+
+\usepackage{array}
+\usepackage{setspace}
+
+
+%%% FOR COLOR  BEAMER LOADS ``xcolor'' by DEFAULT, SO OPTIONS NEED TO BE PASSED IN
+%%% \documentclass option argument above!!!
+%%\usepackage[dvipsnames]{xcolor}
+%%% CF: http://cloford.com/resources/colours/500col.htm
+
+\definecolor{myred}{RGB}{220,20,60}  %%% Crimson
+\definecolor{mypink}{RGB}{255,62,150} %%% violetred
+\definecolor{myblue}{RGB}{100,149,237}   %%% cornflowerblue
+\definecolor{mypurple}{RGB}{155,48,255}  %%% purple 1
+\definecolor{mygreen}{RGB}{0,201,87}   %%% emeraldgreen
+\definecolor{myviolet}{RGB}{218,112,214}  %%% orchid
+\definecolor{mygold}{RGB}{255,215,0}  %%% gold
+\definecolor{sgibeet}{RGB}{142,56,142}  %%% sgibeet %%% This is the background to frametitles, etc. 
+\definecolor{myindig}{RGB}{75,0,130}  %%% plum %%% This is the background to block backgrounds
+
+\newcommand{\cred}[1]{{\color{myred}#1}}
+\newcommand{\cpink}[1]{{\color{mypink}#1}}
+\newcommand{\cblu}[1]{{\color{myblue}#1}}
+\newcommand{\cpurp}[1]{{\color{mypurple}#1}}
+\newcommand{\cgrn}[1]{{\color{mygreen}#1}}
+\newcommand{\cvio}[1]{{\color{myviolet}#1}}
+\newcommand{\cgold}[1]{{\color{mygold}#1}}
+\newcommand{\cbeet}[1]{{\color{sgibeet}#1}} %%%Same as for frametitles!
+\newcommand{\cindig}[1]{{\color{myindig}#1}} %%%Same as for block backgrounds
+
+%%% END INITIAL COLOR DEFINITIONS, BUT MORE BELOW FOR BEAMER. 
+
+%%% So as to not run out of memory
+\usepackage{etex}
+
+%%% For graphics:
+% \begin{center}
+% \includegraphics[width=4.7in]{PM32BLtoRfinal}
+% \end{center}
+\usepackage{graphicx}
+%% This allows for fancy headers and footers if use command below.  Set
+%% to \pagestyle{plain} if don't want.  
+% \usepackage{fancyhdr}
+% \pagestyle{fancy}
+%%% For adding program listings with ``lstlisting'' env.
+\usepackage{listings}
+%%% To get \dbend sign
+\usepackage{manfnt}
+\usepackage{svg}
+%%% For \newmoon, etc. 
+\usepackage{wasysym}
+%%% For simple drawing of diagrams, posets: 
+\usepackage[all]{xy}
+\usepackage{textpos}
+
+%%% Defines various math operators and other notation I use frequently. 
+%%% I eliminated most of these, since most people have their own or won't want mine; 
+ \def\EE{\mathop{{}\mathbb{E}}}
+ \def\PP{\mathop{{}\mathbb{P}}}
+
+%
+\def\zz{\mathbb}
+\def\bfit#1{{\textit{\textbf{#1}}}}
+\def\TE{\exists}
+\def\eset{\emptyset}
+\def\bull{\noindent $\bullet$\kern 2em}
+\def\clickq{\textbf{ClickQuest:  }}
+\def\inv{\mathop{\rm inv}}
+\def\amaj{\mathop{\rm{amaj}}}
+\def\bc#1#2{\left(\kern -2pt{#1\atop #2} \kern -2pt\right)}
+\def \bangle{ \atopwithdelims \langle \rangle}
+%\def\mchoose{{\left(\atopwithdelims()\right)}}
+%%Temporary, until I get a better solution from Ira or Richard
+\def\mchoose{\atopwithdelims\langle \rangle}
+\def\partitions{\vdash}
+\def\bij{\;\longleftrightarrow\;}
+\def\onlyif{\quad \Longleftarrow \quad }
+%%% Above are TeX-style with \def; Below with LaTeX-style \newcommand
+\newcommand{\chk}{{\sc \bf X }}
+\newcommand{\divides}{\mid }
+\newcommand{\leg}[2]{\left(\frac{#1}{#2}\right) }
+\newcommand{\ds}{\displaystyle}
+ \def\Bern{\mathop{\rm Bern}}
+ \def\Bin{\mathop{\rm Bin}}
+ \def\Pois{\mathop{\rm Pois}}
+\def\Geom{\mathop{\rm Geom}}
+\def\NBin{\mathop{\rm NBin}}
+\def\NormDist{\mathop{\mathcal{N}}}
+\def\Unif{\mathop{\rm Unif}}
+\def\Exp{\mathop{\rm Exp}}
+\def\del{\partial}
+\newcommand{\RR}{\mathbb R}
+%
+
+
+%%% With amsthm package, creates environments for nicely formatted,
+%%% labeled, and numbered propositions, etc. 
+\newtheorem{thm}{Theorem}
+% \newtheorem{lemma}[thm]{Lemma}
+\newtheorem{propo}[thm]{Proposition}
+\newtheorem{conj}[thm]{Conjecture}
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{eg}[thm]{Example}
+\newtheorem{defn}[thm]{Definition}
+\newtheorem{rem}[thm]{Remark}
+\newtheorem{key}[thm]{Key Idea}
+%\newtheorem{fact}[thm]{Fact}
+\newtheorem{observ}[thm]{Observation}
+\newtheorem{claim}[thm]{Claim}
+\newtheorem{open}[thm]{Open Problem}
+\newtheorem{prob.}[thm]{Problem}
+\newtheorem{quest}[thm]{Question}
+\newtheorem{princ}{Principle}
+\newtheorem{blank}{}
+%%% Various single alphabet characters in crazy math fonts:
+
+
+%%%%%%%%%%%%%%% BEAMER SPECIFIC SETTINGS %%%%%%%%%%%%%%% 
+
+%%% PICK A BEAMER THEME! 
+\usetheme{Frankfurt}
+
+\usefonttheme[onlylarge]{structurebold}
+\setbeamerfont*{frametitle}{size=\normalsize,series=\bfseries}
+\setbeamertemplate{navigation symbols}{}
+%%Get's rid of black bar across the top for sections\dots 
+\setbeamertemplate{headline}{}
+%\setbeamertemplate{section in head/foot shaded}[default][60]
+%\setbeamertemplate{subsection in head/foot shaded}[default][60]
+%% Changed first opaqueness value to <0> from <1>
+\beamersetuncovermixins{\opaqueness<0>{25}}{\opaqueness<2->{15}}
+
+%%% RECOMMENDED BY STACK EXCHANGE http://tex.stackexchange.com/questions/26476/add-footer-text-to-all-slides-in-beamer
+\setbeamertemplate{footline}[text line]{%
+  \parbox{0.4\linewidth}{
+    \vspace*{-8pt}\color{\footerColor}\crseNo~(\crseTiSht) %, ~\crseSe 
+  }\
+  \parbox{0.45\linewidth}{
+    \vspace*{-8pt} \color{\footerColor}\insertshorttitle~(\insertshortauthor) 
+  }
+  \hfill%
+  \parbox{0.15\linewidth}{
+    \vspace*{-8pt}\raggedleft {\color{\footerColor}\insertframenumber{}}
+    {\color{\footerColor}/ \inserttotalframenumber\hspace*{1ex} }
+%%\insertpagenumber
+%    \vspace*{-8pt}\raggedleft\insertpagenumber
+  }
+}
+
+
+\setbeamercolor{background canvas}{bg=black}
+\def\footerColor{mypink}
+\setbeamercolor*{frametitle}{fg=white,bg=sgibeet}
+\setbeamercolor*{title}{fg=white,bg=sgibeet}
+\setbeamercolor{normal text}{fg=white,bg=black!90}
+\setbeamercolor*{block title}{fg=white,bg=sgibeet}
+\setbeamercolor*{item}{fg=sgibeet, bg=white}
+\setbeamercolor*{block body}{fg=white,bg=black}
+
+
+%%% TR (21 Oct. 2015): my attempt to get the frametitle not across the entire width of the page, but still
+%%% starting right at the left end of the page; Note the need to pull the colorbox back by
+%%% 10pt, then put the text back to 10pt away from the margin.  Also, needed to add 15pt to
+%%% \textwidth, which is most easily done with the \dimexpr command (doesn't work otherwise\dots )
+\setbeamertemplate{frametitle}{%
+\hskip -10pt \begin{beamercolorbox}[wd=\dimexpr\textwidth+15pt\relax, ht=0.5cm, dp=0.2cm]{frametitle}
+\hskip 10pt
+\usebeamerfont{frametitle}\insertframetitle
+\end{beamercolorbox}
+}
+
+
+%%% GOLD for math mode (hence the $$);
+\setbeamercolor{math text}{fg=mygold}
+\setbeamercolor{math text displayed}{fg=mygold}
+
+%%% This Roby-defined package replaces the contrastive background that beamer uses to ``frame'' proclaimations
+%%% (Theorems, Conjectures, etc.) with a thin boarder.  The former is opaque to the
+%%% lightboard technology, making it impossible to point at anything inside such a
+%%% ``frame''.  But eliminating the frame entirely, made it impossible to see where the
+%%% proclamation ended.  
+%%% This package created by TR, Sept. 2015
+\usepackage{beamerBlockFramed}
+\setbeamertemplate{blocks}[framed]
+%%% USER SETABLE PARAMETERS for block frames; 
+%% This is the width of the border around blocks;
+\def\blockFrameBdrWidth{1.4pt} 	   	  %%% Default= 1.4pt
+%% This is the color of the border framing a block;
+\def\blockFrameBdrColor{sgibeet}         %%% Default=sgibeet, same as frametitle bg
+
+
+%%% RESETTING MARGINS TO LEAVE SPACE FOR ME TO WRITE AND BE SEEN
+\setbeamersize{text margin left=10pt}
+\setbeamersize{text margin right=2.3in}
+
+
+%%% FOR PRINTING HANDOUTS TO BRING TO CLASS: 
+%%% UNCOMMENT region below to get black on white with good colors
+%%% ALSO, add ``handout'' to the list of optional arguments in the
+%%% \documentclass[handout,etc.]{beamer} AT TOP
+%%% I suppose the right way to do this is with some LaTeX declarations, but I just use emacs
+%%% to comment or uncomment regions with a couple of keystrokes. 
+
+% \setbeamercolor{background canvas}{bg=white}
+% \setbeamercolor*{frametitle}{fg=black,bg=Cerulean}
+% \setbeamercolor*{title}{fg=black,bg=Cerulean}
+% \setbeamercolor{normal text}{fg=black,bg=white}
+% \setbeamercolor*{block title}{fg=black,bg=Cerulean}
+% \setbeamercolor*{item}{fg=BrickRed, bg=white}
+% \setbeamercolor*{block body}{fg=black,bg=white}
+% \setbeamercolor*{math text}{fg=OliveGreen}
+% \setbeamercolor*{math text displayed}{fg=OliveGreen}
+% \def\footerColor{Bittersweet}
+
+% \def\cred#1{{\color{red}#1}}
+% \def\cpink#1{{\color{BrickRed}#1}}
+% \def\cpurp#1{{\color{mypurple}#1}}
+% \def\cgrn#1{{\color{OliveGreen}#1}}
+% \def\cgrn#1{{\leavevmode\color{OliveGreen}#1}}
+% \def\cvio#1{{\color{violet}#1}}
+% \def\cgold#1{{\color{orange}#1}}
+% \def\cbeet#1{{\color{sgibeet}#1}} %%%Same as for frametitles!
+% \def\cindig#1{{\color{indig}#1}} %%%Same as for block backgrounds
+
+%%% END REGION TO UNCOMMENT FOR PRINTING
+
+
+\begin{document}
+
+
+%%% HERE'S A BLANK FRAME
+
+%%%%%%%%%%% FRAME BREAK %%%%%%%%%%%%
+\begin{frame}
+
+\titlepage
+\end{frame}
+
+
+%%% ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ CURRENT POINT ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 
+
+%%%%%%%%%%% FRAME BREAK %%%%%%%%%%%%
+\begin{frame}
+ \section{}
+ \frametitle{Suggestions for Use} 
+
+This is a beamer template suitable for lightboards as described at the incredibly useful
+website \url{http://lightboard.info/}.  Go there for all the basics: how to make one,
+technological tips, and best practices.  
+
+
+
+
+\end{frame}
+
+
+
+%%%%%%%%%%% FRAME BREAK %%%%%%%%%%%%
+\begin{frame}
+ \section{}
+ \frametitle{Color Testing!} 
+
+Which of the following colors to you particularly like or find particularly hard to read?
+You can change any of these in the preamble.  
+
+\cred{This is red text!}
+
+\cpink{This is pink text!}
+
+\cgold{This is gold text!}
+
+\cgrn{This is green text!}
+
+\cblu{This is blue text!}
+
+\cindig{This is indigo text (more for background use).}
+
+\cvio{This is violet text!}
+
+\cpurp{This is purple text!}
+
+\end{frame}
+
+
+
+%%%%%%%%%%% FRAME BREAK %%%%%%%%%%%%
+
+\begin{frame}
+%  \section{}
+\frametitle{Outline} 
+
+\cred{\bfit{This is really meant to be a beamer template for lightboard videos.  I'm just
+leaving in some sample math from earlier lightboard lectures I made on probability theory.}}
+
+\begin{itemize}
+\cblu{
+
+\item Definition of \cred{\emph{moment generating
+function}}; 
+
+\pause
+
+\item The MGF determines a RV uniquely; 
+
+\pause
+
+\item Examples for standard distributions; 
+
+\pause
+
+\item Applications; 
+}
+\end{itemize}
+
+
+%\vspace{3in}
+
+\end{frame}
+
+%%% ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ CURRENT POINT ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ 
+%%%%%%%%%%% FRAME BREAK %%%%%%%%%%%%
+\begin{frame}
+%  \section{}
+  \frametitle{Moment Generating Functions} 
+
+\begin{defn}
+The \cred{moment generating function} $m_{X}(t)$ of a RV $X$ is 
+\centerline{$ \ds m_{X}(t) = \EE e^{tX}$ \cpink{(whenever defined!)} $ \ds  = \sum_{k=0}^{\infty}\EE [X^{k}]\frac{t^{k}}{k!}$}
+\end{defn}
+\cblu{You can think of this as the Laplace transform of $X$ (FTWK); or as the exponential
+generating function for \cred{\emph{all}} the moments of $X$. 
+\pause
+
+\textbf{Discrete:} $=\sum e^{tx}p(x)$; \textbf{cont:} $\int e^{tx}f(x)\,dx$. 
+}
+\pause
+
+(More advanced: \emph{characteristic function} $\phi_{X}(t) = \EE [e^{itX}]$ always exists
+(converges). Analogue of Fourier transform.)
+\pause
+\begin{propo}
+If $m_{X}(t) = m_{Y}(t) \forall\,t\in (a,b)\subseteq \RR $, then $X=Y$ (as RV).   
+\end{propo}
+So the MGF basically determines the RV.  
+
+\vskip 5in
+\end{frame}
+
+
+
+%%%%%%%%%%% FRAME BREAK %%%%%%%%%%%%
+\begin{frame}
+  \section{}
+  \frametitle{Some Examples} 
+\cblu{Here are MGF for some of our favorite RVs: 
+\pause
+
+$\cgrn{X\sim \Bern (p)}$: $m_{X}(t) = e^{0\cdot t}\cdot (1-p) + e^{1\cdot t}\cdot p$
+$ = (1-p) + pe^{t} = 1 + pt + p\frac{t^{2}}{2!}+ p\frac{t^{3}}{3!}+\dots $.
+
+\pause
+
+$\cgrn{X\sim \Pois (p)}$: $\ds m_{X}(t) = \sum_{k=0}^{\infty} e^{tk}\left(e^{-\lambda}\frac{\lambda^{k}}{k!}\right)$
+$\ds = e^{-\lambda}\sum_{k=0}^{\infty} \frac{(\lambda e^{t})^{k}}{k!} =
+e^{-\lambda}e^{\lambda e^{t}} = e^{\lambda (e^{t}-1)}$. 
+\pause
+
+$\cgrn{X\sim \Exp (\lambda )}$: $\ds m_{X}(t) = \int_{0}^{\infty} e^{tx}\lambda
+e^{-\lambda x}\,dx$
+$\ds  = \lambda \int_{0}^{\infty} e^{-(\lambda - t)x}\,dx = \frac{\lambda}{\lambda -t}$. 
+
+\pause
+
+\cpink{Reality Check: Do $m'(0)$ and $m''(0)$ give correct results?}
+}
+\pause
+
+
+\vskip 5in
+\end{frame}
+
+
+%%%%%%%%%%% FRAME BREAK %%%%%%%%%%%%
+\begin{frame}
+  \section{}
+  \frametitle{Sums of independent RVs and MGFs} 
+\cblu{MGFs behave nicely for sums of RVs: 
+\begin{propo}
+If $X$ and $Y$ are \emph{independent} RVs, then $\ds m_{X+y}(t) = m_{X}(t)m_{Y}(t)$. 
+\end{propo}
+\pause
+
+\cgrn{If $X_{i}\sim \Bern (p)$ are independent}: Then $ \ds Y\sim \Bin(n,p) = \sum_{i=1}^{n} X_{i}$; hence,
+
+$\ds m_{Y}(t) = \prod_{i=1}^{n}m_{X_{i}}(t) = \left[ (1-p) + pe^{t} \right]^{n}$.
+
+\pause
+
+\cpink{Reality Check: Do $m'(0)$ and $m''(0)$ give correct results?}
+}
+\pause
+
+
+\vskip 5in
+\end{frame}
+
+%%%%%%%%%%% FRAME BREAK %%%%%%%%%%%%
+\begin{frame}
+  \section{}
+  \frametitle{Applications} 
+\cblu{Independent Poissons: 
+
+If $X\sim \Pois(\lambda )$ and $Y\sim \Pois (\mu )$ are independent, then 
+\[
+m_{X+Y}(t) = m_{X}(t)m_{Y}(t) = e^{\lambda(e^{t}-1)}e^{\mu (e^{t}-1)} = e^{(\lambda +\mu)
+(e^{t}-1)}. 
+\]
+\pause
+Hence, adding independent Poissons gives $\Pois (\lambda +\mu)$.  
+\pause
+
+Similar calculations show that for $Z\sim \NormDist (0,1)$
+
+$\ds m_{Z}(t) = e^{t^{2}/2} \implies $\\ 
+$\ds m_{\mu +\sigma^{2}Z} = \EE e^{t\mu}e^{t\sigma Z} = e^{t\mu +t^{2}\sigma^{2}/2}$. 
+
+Using this, it's one line to see that if $X\sim \NormDist (a,b^{2})$ and $Y\sim \NormDist
+(c,d^{2})$ are independent, then $X+Y\sim \NormDist (a+c,b^{2}+d^{2})$.  
+}
+\vskip 5in
+\end{frame}
+
+%%%%%%%%%%%%%%%% END DOCUMENT %%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
+
+
+%%How to change the fontsize locally in beamer
+%\fontsize{10}{11}\selectfont
+
